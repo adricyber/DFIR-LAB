@@ -63,6 +63,7 @@ La siguiente tabla resume **qué hace cada herramienta principal que instala o p
 | **Web Security** | **ffuf** | Herramienta de fuzzing y descubrimiento de recursos web. | Enumeración controlada de rutas, parámetros y endpoints autorizados. | CLI |
 | **Web Security** | **Nuclei** | Motor de escaneo basado en templates. | Validaciones repetibles de seguridad sobre objetivos autorizados. | CLI |
 | **Mobile Security** | **MobSF** | Framework para análisis de seguridad de aplicaciones móviles. | Análisis estático y dinámico de APK/IPA de laboratorio. | Docker / Web |
+| **Mobile Security** | **Android Studio + Android Emulator** | Entorno oficial para crear dispositivos Android virtuales y ejecutar APKs como si fueran dispositivos móviles. | Pruebas funcionales de APK, navegación web móvil, tamaños de pantalla, versiones de Android, tráfico y comportamiento de la aplicación. | GUI / Emulator / ADB |
 | **Access Simulation** | **Tor** | Red de anonimización que permite generar tráfico desde una salida Tor. | Validación autorizada de controles frente a tráfico de origen Tor. | Servicio |
 | **Access Simulation** | **WireGuard** | VPN moderna basada en túneles cifrados. | Simulación de accesos desde redes/VPN controladas. | CLI |
 | **Access Simulation** | **proxychains4** | Fuerza aplicaciones compatibles a utilizar proxies configurados. | Pruebas controladas de aplicaciones detrás de un proxy. | CLI |
