@@ -32,7 +32,10 @@ install_zeek() {
     return 0
   fi
 
-  if apt-cache policy zeek 2>/dev/null | grep -qE '^  Candidate: (?!\(none\))' 2>/dev/null; then
+  local apt_candidate
+  apt_candidate="$(apt-cache policy zeek 2>/dev/null | awk '/Candidate:/ {print $2; exit}' || true)"
+
+  if [[ -n "$apt_candidate" && "$apt_candidate" != "(none)" ]]; then
     DEBIAN_FRONTEND=noninteractive apt-get install -y zeek
   else
     . /etc/os-release
