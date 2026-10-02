@@ -80,22 +80,22 @@ DFIR-LAB prepara dos servicios que **no se inician automáticamente** para evita
 
 Para iniciarlos:
 
-`bash
+```bash
 cd /opt/dfir-lab
 sudo docker compose up -d
-`
+```
 
 Comprobar:
 
-`bash
+```bash
 sudo docker compose ps
-`
+```
 
 Detener:
 
-`bash
+```bash
 sudo docker compose down
-`
+```
 
 ### Herramientas base del sistema
 
