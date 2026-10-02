@@ -1,0 +1,16 @@
+# Evidence and secrets
+*.E01
+*.dd
+*.raw
+*.mem
+*.pcap
+*.pcapng
+*.apk
+*.ipa
+*.zip
+*.7z
+.env
+*.key
+*.pem
+credentials*
+secrets*
