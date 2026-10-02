@@ -74,7 +74,109 @@ if [[ -f "$ROOT/downloads/ffuf.tar.gz" ]]; then
  [[ -n "$F" ]] && install -m 0755 "$F" "$BIN/ffuf"
 fi
 
-echo "[7/7] Docker preparado (no levanta servicios automáticamente)"
+
+install_release zaproxy/zaproxy '_Linux\\.tar\\.gz (no levanta servicios automáticamente)"
+systemctl enable docker
+cat > "$ROOT/docker-compose.yml" <<'YAML'
+services:
+  mobsf:
+    image: opensecurity/mobile-security-framework-mobsf:latest
+    container_name: dfir-mobsf
+    ports: ["127.0.0.1:8000:8000"]
+    restart: unless-stopped
+  timesketch:
+    image: ghcr.io/google/timesketch/timesketch:latest
+    container_name: dfir-timesketch
+    ports: ["127.0.0.1:5000:5000"]
+    restart: unless-stopped
+YAML
+
+rsync -a "$SCRIPT_DIR/desktop/" "$DESKTOP/"
+mkdir -p "$DESKTOP/13_DOCUMENTATION"
+install -m 0644 "$SCRIPT_DIR/assets/DFIR-LAB-wallpaper.svg" "$DESKTOP/13_DOCUMENTATION/DFIR-LAB-wallpaper.svg"
+if command -v gsettings >/dev/null 2>&1 && [[ -n "${XDG_CURRENT_DESKTOP:-}" ]]; then
+  sudo -u "$USER_NAME" gsettings set org.gnome.desktop.background picture-uri "file://$DESKTOP/13_DOCUMENTATION/DFIR-LAB-wallpaper.svg" 2>/dev/null || true
+  sudo -u "$USER_NAME" gsettings set org.gnome.desktop.background picture-uri-dark "file://$DESKTOP/13_DOCUMENTATION/DFIR-LAB-wallpaper.svg" 2>/dev/null || true
+fi
+rsync -a "$SCRIPT_DIR/docs/" "$DESKTOP/13_DOCUMENTATION/"
+
+cat > "$DESKTOP/10_EVIDENCE/hash_evidence.sh" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+T="${1:?Uso: hash_evidence.sh <archivo|directorio>}"
+if [[ -f "$T" ]]; then sha256sum "$T"; sha512sum "$T"
+elif [[ -d "$T" ]]; then find "$T" -type f -print0 | sort -z | xargs -0 sha256sum
+else echo "No existe: $T" >&2; exit 1; fi
+EOF
+chmod +x "$DESKTOP/10_EVIDENCE/hash_evidence.sh"
+
+cat > "$DESKTOP/13_DOCUMENTATION/ENVIRONMENT.md" <<EOF
+# Environment
+Usuario: $USER_NAME
+Workspace: $DESKTOP
+Timezone: $(timedatectl show -p Timezone --value)
+Tools: $BIN
+Python DFIR: $VENV
+EOF
+
+chown -R "$USER_NAME:$USER_NAME" "$DESKTOP"
+echo "DFIR-LAB listo en $DESKTOP"
+ zap.tar.gz
+if [[ -f "$ROOT/downloads/zap.tar.gz" ]]; then
+ mkdir -p "$ROOT/zap"
+ tar -xzf "$ROOT/downloads/zap.tar.gz" --strip-components=1 -C "$ROOT/zap"
+ [[ -x "$ROOT/zap/zap.sh" ]] && ln -sf "$ROOT/zap/zap.sh" "$BIN/zap.sh"
+fi
+
+install_release projectdiscovery/nuclei 'nuclei_.*_linux_amd64\\.zip (no levanta servicios automáticamente)"
+systemctl enable docker
+cat > "$ROOT/docker-compose.yml" <<'YAML'
+services:
+  mobsf:
+    image: opensecurity/mobile-security-framework-mobsf:latest
+    container_name: dfir-mobsf
+    ports: ["127.0.0.1:8000:8000"]
+    restart: unless-stopped
+  timesketch:
+    image: ghcr.io/google/timesketch/timesketch:latest
+    container_name: dfir-timesketch
+    ports: ["127.0.0.1:5000:5000"]
+    restart: unless-stopped
+YAML
+
+rsync -a "$SCRIPT_DIR/desktop/" "$DESKTOP/"
+rsync -a "$SCRIPT_DIR/docs/" "$DESKTOP/13_DOCUMENTATION/"
+
+cat > "$DESKTOP/10_EVIDENCE/hash_evidence.sh" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+T="${1:?Uso: hash_evidence.sh <archivo|directorio>}"
+if [[ -f "$T" ]]; then sha256sum "$T"; sha512sum "$T"
+elif [[ -d "$T" ]]; then find "$T" -type f -print0 | sort -z | xargs -0 sha256sum
+else echo "No existe: $T" >&2; exit 1; fi
+EOF
+chmod +x "$DESKTOP/10_EVIDENCE/hash_evidence.sh"
+
+cat > "$DESKTOP/13_DOCUMENTATION/ENVIRONMENT.md" <<EOF
+# Environment
+Usuario: $USER_NAME
+Workspace: $DESKTOP
+Timezone: $(timedatectl show -p Timezone --value)
+Tools: $BIN
+Python DFIR: $VENV
+EOF
+
+chown -R "$USER_NAME:$USER_NAME" "$DESKTOP"
+echo "DFIR-LAB listo en $DESKTOP"
+ nuclei.zip
+if [[ -f "$ROOT/downloads/nuclei.zip" ]]; then
+ mkdir -p "$ROOT/downloads/nuclei"
+ unzip -oq "$ROOT/downloads/nuclei.zip" -d "$ROOT/downloads/nuclei"
+ N="$(find "$ROOT/downloads/nuclei" -type f -name nuclei -print -quit || true)"
+ [[ -n "$N" ]] && install -m 0755 "$N" "$BIN/nuclei"
+fi
+
+echo "[7/7] ZAP/Nuclei + Docker preparado (no levanta servicios automáticamente)"
 systemctl enable docker
 cat > "$ROOT/docker-compose.yml" <<'YAML'
 services:
